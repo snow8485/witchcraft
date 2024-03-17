@@ -1,0 +1,19 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  background-color: bisque;
+}
+
+#p5-canvas-container {
+  width:1063px;
+  margin: auto;
+  padding: 100px;
+  /* background-color: aqua; */
+}
