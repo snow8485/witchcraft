@@ -13,7 +13,7 @@ body {
 }
 
 #p5-canvas-container {
-  width: 1063px;
+  width: calc(1063px / 2);
   margin: auto;
   /* t r b l */
   padding: 100px 100px 50px 100px;
@@ -21,7 +21,7 @@ body {
 }
 
 #text-input-container {
-  width: 1063px;
+  width: calc(1063px / 2);
   margin: auto;
   padding: 0px 100px 100px 100px;
   /* background-color: aqua; */

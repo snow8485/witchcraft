@@ -1,28 +1,40 @@
+let SCREEN_WIDTH = 1063 / 2;
+let SCREEN_HEIGHT = 1890 / 2;
+let SCREEN_RATIO = 1;
 let img;
 let seq = 0;
 let cam;
 //let button;
 
-var snap;
+let snap;
 
-var wordsss
-var words
+let userTextInput = "";
 
 
+// TEXT OBJ
+let userTextObj = "";
+let textX, textY;
+
+let words;
 
 function preload() {
   img = loadImage('assets/start.png');
 }
 
 function setup() {
-  let canvas = createCanvas(1063, 1890);
+  let canvas = createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
   canvas.parent("p5-canvas-container");
+
+  SCREEN_RATIO = SCREEN_HEIGHT / 480;
 
   cam = createCapture(VIDEO);
   cam.hide();
 
-  snap = createImage(640 * 3.9375, 480 * 3.9375);
+  snap = createImage(640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
   createTextInput();
+
+  textX = width / 2;
+  textY = height / 2;
 }
 
 function draw() {
@@ -43,65 +55,110 @@ function draw() {
     scale(-1, 1);
 
     // to place the camera image to the center
-    translate(-640 * 3.9375 / 2 + 1063 / 2, 0); // - camWidth/2 + canvasWidth/2
+    translate(-640 * SCREEN_RATIO / 2 + 1063 / 2, 0); // - camWidth/2 + canvasWidth/2
 
     // display the cam image and snapshot!
-    image(cam, 0, 0, 640 * 3.9375, 480 * 3.9375);
-    image(snap, 0, 0, 640 * 3.9375, 480 * 3.9375);
+    image(cam, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
+    image(snap, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
 
     pop();
   }
   else if (seq == 3) {
     background(255, 0, 255);
   }
-}
 
-function updateText() {
-  wordsss.html(words.value());
+  // input
+  textAlign(CENTER);
+  textSize(15);
+  text(userTextInput, width / 2, 50);
+
+  // submitted text
+  textSize(30);
+  text(userTextObj, textX, textY);
+
+  if (mouseIsPressed) {
+    textX = mouseX;
+    textY = mouseY;
+  }
+
 }
 
 function keyPressed() {
-
-  //function mousePressed() {
-
   if (key == " ") {
-    seq = seq + 1;
+    //seq = seq + 1;
   }
-
-  if (key == "a") {
-
+  else if (key == "a") {
     // save('myCanvas.png');
-    snap = cam.get(0, 0);
-
-    return false;
+    //snap = cam.get(0, 0);
   }
-
-  if (key == "p") {
-
+  else if (key == "p") {
     //
   }
-
-  if (key == "s") {
-
-    saveCanvas('myCanvas.png');
+  else if (key == "s") {
+    //saveCanvas('myCanvas.png');
     //snap = cam.get(0, 0);
-
-    return false;
   }
+
+
 }
+
 
 
 function createTextInput() {
-  words = createInput('say something');
-  words.input(updateText);
-  words.parent("text-input-container")
+  words = createInput("");
+  words.parent("text-input-container");
+  //words.input(updateText); // not working as intended
+  words.elt.addEventListener("keydown", updateText); // JS
+
+  btn = createButton("Submit!");
+  btn.parent("text-input-container");
+  btn.mousePressed(submitText)
 }
 
-function createParagraph() {
-  wordsss = createP('?')
-  wordsss.style('font-size', 16)
-  wordsss.style('color', 'deeppink');
+
+
+function submitText() {
+  //userTextObj = userTextInput;
+  userTextObj = userTextInput; //words.value();
 }
 
+function updateText(event) {
+  if (event.key == "Enter") {
+    userTextInput += words.value();
+    userTextInput += "\n";
+    words.elt.innerHTML = ""; // ***
+  }
+  userTextInput = words.value();
+}
 
+function updateText111(event) {
+  //userTextInput = words.value();
 
+  console.log(event);
+  if (event.key == "Enter") {
+    userTextInput += "\n";
+  }
+  else if (event.key == "Shift") {
+    //
+  }
+  else if (event.key == "Control") {
+    //
+  }
+  else if (event.key == "Alt") {
+    //
+  }
+  else if (event.key == "Meta") {
+    //
+  }
+  else if (event.key == "Backspace") {
+    userTextInput = userTextInput.slice(0, -1);
+    //https://byby.dev/js-remove-last-char
+    //Here slice(0, -1) removes the last character because -1 means the last index of the string. You can also use str.length - 1 instead of -1 to get the same result.
+  }
+  else if (event.key == "Tab") {
+    //
+  }
+  else {
+    userTextInput += event.key;
+  }
+}
