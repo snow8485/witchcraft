@@ -12,6 +12,8 @@ let emoji1;
 
 let snap;
 
+let tempCanvas;
+
 
 let userTextInput = "";
 
@@ -50,7 +52,7 @@ function setup() {
 
 
   button_next = createButton('next');
-
+  //button_next.position(0, 0);
   button_next.mousePressed(NEXT);
 
 
@@ -110,17 +112,28 @@ function draw() {
     pop();
 
 
-
-
-
-
   }
 
   else if (seq == 3) {
     //background(255, 0, 255);
-    //image(snap, 0, 0);
+    push();
 
-    words.show();
+    // to flip
+    translate(width, 0);
+    scale(-1, 1);
+
+    // to place the camera image to the center
+    translate(-640 * SCREEN_RATIO / 2 + 1063 / 2, 0); // - camWidth/2 + canvasWidth/2
+
+    // display the cam image and snapshot!
+    image(cam, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
+    //image(snap, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
+
+    button_next.hide();
+    button_snap.show();
+
+    pop();
+
 
 
   }
@@ -147,6 +160,7 @@ function NEXT() {
 
   if (seq = 2) {
     button_snap.show();
+    //button_snap.position(200, 0);
   }
 
 }
@@ -163,13 +177,17 @@ function PROCEED() {
 
   button_submit.show();
 
+
+
   return false;
 
 }
 
 function RETAKE() {
 
-  tempCanvas.hide();
+  //snap.hide();
+  clear();
+  seq = 3;
 
 }
 
@@ -177,18 +195,23 @@ function SNAP() {
 
   //snap = cam.get(0, 0);
 
-  let tempCanvas = createGraphics(width, height);
+  //let tempCanvas = createGraphics(width, height);
+
+  tempCanvas = createGraphics(width, height);
+
   tempCanvas.push();
-  //tempCanvas.scale(-1, 1); // 反转图像，因为你在主画布上也反转了摄像头图像
+  //tempCanvas.scale(-1, 1); 
   tempCanvas.image(cam, width, 0, -width, height);
   tempCanvas.pop();
 
-  // 从临时画布获取图像
+
   snap = tempCanvas.get();
 
   button_snap.hide();
   button_proceed.show();
   button_retake.show();
+
+  seq = 2;
 
   return false;
 
