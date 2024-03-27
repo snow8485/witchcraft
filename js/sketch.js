@@ -5,8 +5,8 @@ let img;
 let seq = 0;
 let cam;
 
-let button1, button2, button3, button4;
-let button5;
+let button1, button_next, button_snap, button_save;
+let button_proceed, button_retake, button_submit;
 
 let emoji1;
 
@@ -35,6 +35,7 @@ function setup() {
   let canvas = createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
   canvas.parent("p5-canvas-container");
 
+
   SCREEN_RATIO = SCREEN_HEIGHT / 480;
 
   cam = createCapture(VIDEO);
@@ -43,25 +44,40 @@ function setup() {
   snap = createImage(640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
 
   createTextInput();
+
   textX = width / 2;
   textY = height / 2;
 
 
-  button2 = createButton('next');
+  button_next = createButton('next');
 
-  button2.mousePressed(NEXT);
+  button_next.mousePressed(NEXT);
 
 
-  button3 = createButton('Snap');
+  button_snap = createButton('Snap');
 
-  button3.mousePressed(SNAP);
+  button_snap.mousePressed(SNAP);
   text(userTextObj, textX, textY);
-  button3.hide();
+  button_snap.hide();
 
-  button4 = createButton('Save');
-  button4.mousePressed(SAVE);
-  button4.hide();
+  button_save = createButton('Save');
+  button_save.mousePressed(SAVE);
+  button_save.hide();
 
+  button_proceed = createButton('Proceed');
+  button_proceed.mousePressed(PROCEED);
+  button_proceed.hide();
+
+  button_retake = createButton('Retake');
+  button_retake.mousePressed(RETAKE);
+  button_retake.hide();
+
+
+
+  button_submit = createButton("Submit!");
+  button_submit.parent("text-input-container");
+  button_submit.mousePressed(submitText)
+  button_submit.hide();
 
 }
 
@@ -89,25 +105,30 @@ function draw() {
     image(cam, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
     image(snap, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
 
+    button_next.hide();
+
     pop();
 
-    button3.show();
 
-    button4.show();
+
+
+
 
   }
 
   else if (seq == 3) {
     //background(255, 0, 255);
-    image(snap, 0, 0);
+    //image(snap, 0, 0);
+
+    words.show();
 
 
   }
 
-  // input
-  textAlign(CENTER);
-  textSize(15);
-  text(userTextInput, width / 2, 50);
+  // input 显示测试输入
+  //textAlign(CENTER);
+  //textSize(15);
+  //text(userTextInput, width / 2, 50);
 
   // submitted text
   textSize(30);
@@ -124,14 +145,53 @@ function NEXT() {
 
   seq = seq + 1;
 
+  if (seq = 2) {
+    button_snap.show();
+  }
+
 }
 
+function PROCEED() {
+
+  words.show();
+
+  button_retake.hide();
+
+  button_proceed.hide();
+
+  button_snap.hide();
+
+  button_submit.show();
+
+  return false;
+
+}
+
+function RETAKE() {
+
+  tempCanvas.hide();
+
+}
 
 function SNAP() {
 
-  snap = cam.get(0, 0);
-  //text(userTextObj, textX, textY);
+  //snap = cam.get(0, 0);
+
+  let tempCanvas = createGraphics(width, height);
+  tempCanvas.push();
+  //tempCanvas.scale(-1, 1); // 反转图像，因为你在主画布上也反转了摄像头图像
+  tempCanvas.image(cam, width, 0, -width, height);
+  tempCanvas.pop();
+
+  // 从临时画布获取图像
+  snap = tempCanvas.get();
+
+  button_snap.hide();
+  button_proceed.show();
+  button_retake.show();
+
   return false;
+
 
 }
 
@@ -146,12 +206,13 @@ function SAVE() {
 function createTextInput() {
   words = createInput("");
   words.parent("text-input-container");
+  words.hide();
   //words.input(updateText); // not working as intended
   words.elt.addEventListener("keydown", updateText); // JS
 
-  btn = createButton("Submit!");
-  btn.parent("text-input-container");
-  btn.mousePressed(submitText)
+  //  button_submit = createButton("Submit!");
+  // button_submit.parent("text-input-container");
+  // button_submit.mousePressed(submitText)
 }
 
 
@@ -159,6 +220,7 @@ function createTextInput() {
 function submitText() {
   //userTextObj = userTextInput;
   userTextObj = userTextInput; //words.value();
+  button_save.show();
 }
 
 function updateText(event) {
