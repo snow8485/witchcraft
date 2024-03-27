@@ -7,6 +7,7 @@ let cam;
 
 let button1, button_next, button_snap, button_save;
 let button_proceed, button_retake, button_submit;
+let button_edit, button_text_input;
 
 let emoji1;
 
@@ -74,12 +75,18 @@ function setup() {
   button_retake.mousePressed(RETAKE);
   button_retake.hide();
 
-
-
-  button_submit = createButton("Submit!");
+  button_submit = createButton("Finish!");
   button_submit.parent("text-input-container");
   button_submit.mousePressed(submitText)
   button_submit.hide();
+
+  button_edit = createButton('Finish');
+  button_edit.mousePressed(EDIT)
+  button_edit.hide();
+
+  button_text_input = createButton('Say Something');
+  button_text_input.mousePressed(text_input)
+  button_text_input.hide();
 
 }
 
@@ -87,10 +94,11 @@ function draw() {
   background(0);
 
   if (seq == 0) {
-    background(255, 0, 0);
+    //background(255, 0, 0);
+    image(img, 0, 0)
   }
   else if (seq == 1) {
-    image(img, 0, 0)
+
   }
   else if (seq == 2) {
 
@@ -132,11 +140,37 @@ function draw() {
     button_next.hide();
     button_snap.show();
 
+    button_proceed.hide();
+    button_retake.hide();
+
     pop();
 
-
-
   }
+
+  else if (seq == 4) {
+
+    //background(255, 0, 255);
+    push();
+
+    // to flip
+    translate(width, 0);
+    scale(-1, 1);
+
+    // to place the camera image to the center
+    translate(-640 * SCREEN_RATIO / 2 + 1063 / 2, 0); // - camWidth/2 + canvasWidth/2
+
+    // display the cam image and snapshot!
+    //image(cam, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
+    image(snap, 0, 0, 640 * SCREEN_RATIO, 480 * SCREEN_RATIO);
+
+    //button_next.hide();
+    //button_snap.show();
+    button_edit.show();
+
+
+    pop();
+  }
+
 
   // input 显示测试输入
   //textAlign(CENTER);
@@ -156,30 +190,22 @@ function draw() {
 
 function NEXT() {
 
-  seq = seq + 1;
+  //seq = seq + 1;
 
-  if (seq = 2) {
-    button_snap.show();
-    //button_snap.position(200, 0);
-  }
+  //if (seq = 2) {
+  seq = 2;
+  button_snap.show();
+  //button_snap.position(200, 0);
+  //}
 
 }
 
 function PROCEED() {
 
-  words.show();
-
+  button_edit.show();
   button_retake.hide();
-
   button_proceed.hide();
 
-  button_snap.hide();
-
-  button_submit.show();
-
-
-
-  return false;
 
 }
 
@@ -225,6 +251,28 @@ function SAVE() {
 
 }
 
+function EDIT() {
+
+  button_snap.hide();
+  button_text_input.show();
+  button_edit.hide();
+  button_save.show();
+
+}
+
+function text_input() {
+
+  words.show();
+  button_submit.show();
+  button_text_input.hide();
+
+
+  return false;
+
+}
+
+
+//----TEXT INPUT DETAIL SETTINGS----
 
 function createTextInput() {
   words = createInput("");
@@ -237,7 +285,6 @@ function createTextInput() {
   // button_submit.parent("text-input-container");
   // button_submit.mousePressed(submitText)
 }
-
 
 
 function submitText() {
