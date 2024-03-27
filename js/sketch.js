@@ -9,7 +9,8 @@ let button1, button_next, button_snap, button_save;
 let button_proceed, button_retake, button_submit;
 let button_edit, button_text_input;
 
-let emoji1;
+let emoji_1_sun, button_emoji_1_sun;
+let bs1_sun;
 
 let snap;
 
@@ -18,7 +19,8 @@ let tempCanvas;
 
 let userTextInput = "";
 
-
+// IMG
+let em1X, em1Y;
 
 // TEXT OBJ
 let userTextObj = "";
@@ -29,7 +31,9 @@ let words;
 function preload() {
   img = loadImage('assets/start.png');
 
-  //emoji1 = loadImage();
+
+  emoji_1_sun = loadImage('assets/em1.png');
+
 
 }
 
@@ -75,7 +79,7 @@ function setup() {
   button_retake.mousePressed(RETAKE);
   button_retake.hide();
 
-  button_submit = createButton("Finish!");
+  button_submit = createButton("Submit");
   button_submit.parent("text-input-container");
   button_submit.mousePressed(submitText)
   button_submit.hide();
@@ -87,6 +91,12 @@ function setup() {
   button_text_input = createButton('Say Something');
   button_text_input.mousePressed(text_input)
   button_text_input.hide();
+
+  button_emoji_1_sun = createImg(emoji_1_sun);
+  //button.position(19, 19);
+  button_emoji_1_sun.mousePressed(BS1);
+  button_emoji_1_sun.hide();
+
 
 }
 
@@ -169,6 +179,9 @@ function draw() {
 
 
     pop();
+
+
+
   }
 
 
@@ -205,6 +218,8 @@ function PROCEED() {
   button_edit.show();
   button_retake.hide();
   button_proceed.hide();
+
+  button_emoji_1_sun.show();
 
 
 }
@@ -257,6 +272,7 @@ function EDIT() {
   button_text_input.show();
   button_edit.hide();
   button_save.show();
+  button_emoji_1_sun.hide();
 
 }
 
@@ -268,8 +284,21 @@ function text_input() {
 
 
   return false;
+}
+
+function BS1() {
+
+  image(emoji_1_sun, 200, 200);
+
+  // image(emoji_1_sun, em1X, em1Y);
+
+  //if (mouseIsPressed) {
+  //  em1X = mouseX;
+  // em1Y = mouseY;
+  // }
 
 }
+
 
 
 //----TEXT INPUT DETAIL SETTINGS----
